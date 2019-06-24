@@ -1,0 +1,44 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+}
+
+input {
+    width: 10%;
+    border-radius: 15px;
+    outline: none;
+}
+
+select {
+    width: 10%;
+    border-radius: 15px;
+    outline: none;
+}
+
+header {
+	background-image: linear-gradient(
+		to right bottom,
+		#4f9edfcc,
+		#2a83ccc9
+    );
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+h1 {
+    padding: 1rem;
+}
+
+.text-input {
+	text-align: center;
+}
+
+.dropdown {
+    text-align: center;
+    margin-bottom: 2px;
+}
+
+.card {
+	border: black solid 1px;
+	margin: 2px;
+}
