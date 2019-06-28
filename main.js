@@ -1,65 +1,60 @@
-// import { Client } from "@petfinder/petfinder-js";
+import { Client } from "@petfinder/petfinder-js";
 
-// let selectedAnimal;
-// let animalsData;
+const animalTypes = document.querySelector("#animal-types");
+const results = document.querySelector(".results");
 
-// const client = new Client({
-// 	apiKey: "hUqDH8B26YwHadBHYbplwsLg9fyNExrYMZ1fYOXRj7oWh5Fmvq",
-// 	secret: "lgy0f0Emuw68B5EBYOTlLtITpvyl1eIatXqZqnNR"
-// });
+const client = new Client({
+	apiKey: "hUqDH8B26YwHadBHYbplwsLg9fyNExrYMZ1fYOXRj7oWh5Fmvq",
+	secret: "lgy0f0Emuw68B5EBYOTlLtITpvyl1eIatXqZqnNR"
+});
 
-// client.animalData.types().then(res => {
-// 	console.log(res);
-// 	selectAnimals(res.data.types);
-// });
+client.animalData.types().then(res => {
+	// console.log(res);
+	const types = res.data.types.sort((a, b) => a.name.length - b.name.length);
+	console.log("types :", types);
+	types.forEach(type => {
+		// Value for option is equal to text inside???
+		animalTypes.innerHTML += `
+            <option>${type.name}</option>
+        `;
+	});
+});
 
-// client.animal
-// 	.search({type: 'Bird'})
-// 	.then(res => {
-// 		console.log(res.data.animals);
-// 		animalsData = res.data.animals;
-// 	})
-// 	.catch(err => {
-// 		console.log(err);
-// 	});
+animalTypes.addEventListener("change", e => {
+	console.log(e.target.value);
+	const selectedAnimal = e.target.value;
+	client.animal
+		.search({ type: e.target.value })
+		.then(res => {
+			// console.log(res.data.animals);
+			listAnimals(res.data.animals);
+		})
+		.catch(err => {
+			console.log(err);
+		});
+});
 
-// const animalTypes = document.querySelector("#animal-types");
-// animalTypes.addEventListener("change", e => {
-// 	console.log(e.target.value);
-// 	const selectedAnimal = e.target.value;
-// 	listAnimals(animalsData, selectedAnimal);
-// });
-
-// const selectAnimals = types => {
-// 	types.forEach(item => {
-// 		// let opt = document.createElement("option");
-// 		// opt.value = item.name;
-// 		// opt.innerText = item.name;
-// 		// animalTypes.appendChild(opt);
-
-// 		// Value for option is equal to text inside???
-// 		animalTypes.innerHTML += `
-//             <option>${item.name}</option>
-//         `;
-// 	});
-// };
-
-// const results = document.querySelector(".results");
-// const listAnimals = (animals, selectedAnimal) => {
-// 	results.innerHTML = "";
-// 	const selected = animals.filter(animal => animal.type == selectedAnimal);
-// 	console.log(selected);
-// 	selected.forEach(item => {
-// 		results.innerHTML += `
-//             <div class='card'>
-//                 <div>${item.name}</div>
-//                 <div>${item.id}</div>
-//                 <div>${item.age}</div>
-//                 <div>${item.gender}</div>
-//             </div>
-//         `;
-// 	});
-// };
+const listAnimals = animalsData => {
+	results.innerHTML = "";
+	console.log(animalsData);
+	animalsData.forEach(animal => {
+		results.innerHTML += `
+            <div class='card'>
+                <img src=${
+					animal.photos.length > 0 ? animal.photos[0].medium : null
+                } alt='Animal photo' class='card-img'>
+                <div class='card-content'>
+                    <ul>
+                        <li><strong>Name:</strong>${animal.name}</li>
+                        <li><strong>ID:</strong>${animal.id}</li>
+                        <li><strong>Age:</strong>${animal.age}</li>
+                        <li><strong>gender:</strong>${animal.gender}</li>   
+                    </ul>
+                </div>
+            </div>
+        `;
+	});
+};
 
 // client.organization.search({state: 'NY', limit: 100}).then(resp => {
 // 	console.log(resp);
